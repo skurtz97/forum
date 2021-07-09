@@ -1,9 +1,9 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
-import { useFirebase } from "../contexts/FirebaseContext";
+import { useAuth } from "./AuthContext";
 
 function PrivateRoute({ component: Component, ...rest }) {
-  const { currentUser } = useFirebase();
+  const { currentUser } = useAuth();
   return (
     <Route
       {...rest}

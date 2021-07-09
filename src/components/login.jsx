@@ -13,6 +13,8 @@ import {
   Link,
 } from "@chakra-ui/react";
 
+import { Link as RouterLink } from "react-router-dom";
+
 const LoginForm = () => {
   const validateEmail = (email) => {
     let error;
@@ -97,7 +99,12 @@ const LoginHeader = () => {
       </Heading>
       <Text align="center" fontWeight="medium" maxW="md" mt="4" mb="8">
         <Text as="span">Don't have an account? </Text>
-        <Link href="#" color="blue.400" _hover={{ color: "blue.600" }}>
+        <Link
+          as={RouterLink}
+          to="/register"
+          color="blue.400"
+          _hover={{ color: "blue.600" }}
+        >
           Register
         </Link>
       </Text>
