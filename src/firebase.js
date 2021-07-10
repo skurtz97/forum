@@ -14,9 +14,25 @@ const app = firebase.initializeApp({
 const db = app.firestore();
 
 export const addUser = async (email, name, password) => {
-  return db.collection("users").add({ email: email, name: name, password });
+  return db
+    .collection("users")
+    .add({
+      email: email,
+      name: name,
+      password,
+      createdAt: firebase.database.ServerValue.TIMESTAMP,
+    });
 };
 
+export const addThread = async (username, subject) => {
+  return db
+    .collection("threads")
+    .add({
+      subject: subject,
+      creadtedBy: username,
+      createdAt: firebase.database.ServerValue.TIMESTAMP,
+    });
+};
 export const getThreads = async () => {
   return db.collection("threads").orderBy("createdAt", "desc").get();
 };
@@ -37,5 +53,4 @@ export const getThreadsBefore = async (doc, lim) => {
     .endBefore(doc);
 };
 
-export const getTimestamp = firebase.firestore.FieldValue.serverTimestamp();
 export const auth = app.auth();

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "./AuthContext";
 import { getThreads } from "../firebase";
+import NewThreadModal from "./NewThreadModal";
 
 import {
   Box,
@@ -10,13 +11,17 @@ import {
   IconButton,
   Flex,
   Heading,
-  Input,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@chakra-ui/icons";
 
 const Home = () => {
+  // Our threads
   const [threads, setThreads] = useState([]);
+  // For signing out
   const { signout } = useAuth();
+  // Controls modal for add thread
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(async () => {
     try {
@@ -46,10 +51,10 @@ const Home = () => {
       <Box bg="white" py="4" px="4" my="2" shadow="base" rounded="lg">
         <Flex justify="space-between" alignItems="center">
           <Flex>
-            <Input type="text"></Input>
-            <Button colorScheme="blue" px="8" mx="4">
-              Create Thread
+            <Button onClick={onOpen} colorScheme="blue" px="8" mx="4">
+              Add Thread
             </Button>
+            <NewThreadModal isOpen={isOpen} onClose={onClose} />
           </Flex>
 
           <Box>
