@@ -21,5 +21,21 @@ export const getThreads = async () => {
   return db.collection("threads").orderBy("createdAt", "desc").get();
 };
 
+export const getThreadsAfter = async (doc, lim) => {
+  return db
+    .collection("threads")
+    .limit(lim)
+    .orderBy("createdAt", "desc")
+    .startAfter(doc);
+};
+
+export const getThreadsBefore = async (doc, lim) => {
+  return db
+    .collection("threads")
+    .limitToLast(lim)
+    .orderBy("createdAt", "desc")
+    .endBefore(doc);
+};
+
 export const getTimestamp = firebase.firestore.FieldValue.serverTimestamp();
 export const auth = app.auth();
