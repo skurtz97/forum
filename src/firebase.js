@@ -11,6 +11,15 @@ const app = firebase.initializeApp({
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
 });
 
+const db = app.firestore();
+
+export const addUser = async (email, name, password) => {
+  return db.collection("users").add({ email: email, name: name, password });
+};
+
+export const getThreads = async () => {
+  return db.collection("threads").orderBy("createdAt", "desc").get();
+};
+
 export const getTimestamp = firebase.firestore.FieldValue.serverTimestamp();
 export const auth = app.auth();
-export const db = app.firestore();

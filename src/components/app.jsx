@@ -1,5 +1,5 @@
 import React from "react";
-import { ChakraProvider, Box, Heading } from "@chakra-ui/react";
+import { ChakraProvider, Box, Heading, Button } from "@chakra-ui/react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import theme from "../theme";
@@ -7,13 +7,8 @@ import { AuthProvider } from "./AuthContext";
 import PrivateRoute from "./PrivateRoute";
 import Login from "./Login";
 import Register from "./Register";
+import Home from "./Home";
 
-const Home = () => {
-  return <Heading>Home</Heading>;
-};
-const Header = () => {
-  return <header></header>;
-};
 const App = () => {
   return (
     <AuthProvider>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Heading,
@@ -12,7 +12,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import {
   validateEmail,
@@ -21,27 +21,55 @@ import {
   validateConfirmPassword,
 } from "../validate";
 
+import { addUser } from "../firebase";
+import { useAuth } from "./AuthContext";
+
+import FormAlert from "./FormAlert";
+
 const RegisterForm = () => {
+  const [submitError, setSubmitError] = useState("");
+  const { signup } = useAuth();
+  const history = useHistory();
+
   return (
     <Formik
       initialValues={{ email: "", username: "", password: "", confirm: "" }}
-      onSubmit={(values, actions) => {
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
+      onSubmit={async (values, actions) => {
+        actions.setSubmitting(true);
+        try {
+          actions.setSubmitting(true);
+          await signup(values.email, values.password);
+          addUser(values.email, values.username, values.password);
           actions.setSubmitting(false);
-        }, 1000);
+          history.push("/");
+        } catch (err) {
+          console.log(err.message);
+          actions.resetForm();
+          actions.setFieldError("submit", err.message);
+        } finally {
+          actions.setSubmitting(false);
+        }
       }}
     >
-      {({ values, isSubmitting }) => (
+      {({ values, isSubmitting, handleBlur, handleChange, errors }) => (
         <Form>
           <Stack spacing="6">
+            {errors.submit && (
+              <FormAlert status="error" message={errors.submit} />
+            )}
             <Field name="email" validate={validateEmail}>
               {({ field, form }) => (
                 <FormControl
                   isInvalid={form.errors.email && form.touched.email}
                 >
                   <FormLabel htmlFor="email">Email address</FormLabel>
-                  <Input {...field} id="email" />
+                  <Input
+                    {...field}
+                    id="email"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.email}
+                  />
                   <FormErrorMessage>{form.errors.email}</FormErrorMessage>
                 </FormControl>
               )}
@@ -52,7 +80,13 @@ const RegisterForm = () => {
                   isInvalid={form.errors.username && form.touched.username}
                 >
                   <FormLabel htmlFor="username">Username</FormLabel>
-                  <Input {...field} id="username" />
+                  <Input
+                    {...field}
+                    id="username"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.username}
+                  />
                   <FormErrorMessage>{form.errors.username}</FormErrorMessage>
                 </FormControl>
               )}
@@ -63,7 +97,14 @@ const RegisterForm = () => {
                   isInvalid={form.errors.password && form.touched.password}
                 >
                   <FormLabel htmlFor="password">Password</FormLabel>
-                  <Input {...field} id="password" type="password" />
+                  <Input
+                    {...field}
+                    id="password"
+                    type="password"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.password}
+                  />
                   <FormErrorMessage>{form.errors.password}</FormErrorMessage>
                 </FormControl>
               )}
@@ -79,7 +120,14 @@ const RegisterForm = () => {
                   isInvalid={form.errors.confirm && form.touched.confirm}
                 >
                   <FormLabel htmlFor="confirm">Confirm Password</FormLabel>
-                  <Input {...field} id="confirm" type="password" />
+                  <Input
+                    {...field}
+                    id="confirm"
+                    type="password"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.confirm}
+                  />
                   <FormErrorMessage>{form.errors.confirm}</FormErrorMessage>
                 </FormControl>
               )}
@@ -121,6 +169,13 @@ const RegisterHeading = () => {
       </Text>
     </>
   );
+};
+const RegisterAlert = ({ msg }) => {
+  <Alert status="error">
+    <AlertIcon />
+    <AlertTitle>{msg}</AlertTitle>
+    <CloseButton position="absolute" right="8px" top="8px" />
+  </Alert>;
 };
 
 const Register = () => {

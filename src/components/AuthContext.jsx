@@ -15,7 +15,7 @@ export function AuthProvider({ children }) {
     try {
       return auth.createUserWithEmailAndPassword(email, password);
     } catch (err) {
-      return console.log(err);
+      return err;
     }
   }
   function signin(email, password) {

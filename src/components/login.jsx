@@ -12,10 +12,14 @@ import {
   Text,
   Link,
 } from "@chakra-ui/react";
-
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
+import FormAlert from "./FormAlert";
+import { useAuth } from "./AuthContext";
 
 const LoginForm = () => {
+  const { signin } = useAuth();
+  const history = useHistory();
+
   const validateEmail = (email) => {
     let error;
     if (!email) {
@@ -40,16 +44,27 @@ const LoginForm = () => {
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
-      onSubmit={(values, actions) => {
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
+      onSubmit={async (values, actions) => {
+        try {
+          actions.setSubmitting(true);
+          await signin(values.email, values.password);
           actions.setSubmitting(false);
-        }, 1000);
+          history.push("/");
+        } catch (err) {
+          console.log(err.message);
+          actions.resetForm();
+          actions.setFieldError("submit", err.message);
+        } finally {
+          actions.setSubmitting(false);
+        }
       }}
     >
-      {({ isSubmitting }) => (
+      {({ isSubmitting, errors }) => (
         <Form>
           <Stack spacing="6">
+            {errors.submit && (
+              <FormAlert status="error" message={errors.submit} />
+            )}
             <Field name="email" validate={validateEmail}>
               {({ field, form }) => (
                 <FormControl
