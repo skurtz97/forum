@@ -28,10 +28,10 @@ export const validatePassword = (password) => {
  */
 export const validateConfirmPassword = (confirm, password) => {
   let error = "";
-  if (!confirm) {
-    error = "Enter the password again";
-  } else if (confirm !== password) {
-    error = "The passwords don't match";
+  if (confirm && password) {
+    if (confirm !== password) {
+      error = "Password doesn't match";
+    }
   }
   return error;
 };

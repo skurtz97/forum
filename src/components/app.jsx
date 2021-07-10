@@ -11,7 +11,9 @@ import Register from "./Register";
 const Home = () => {
   return <Heading>Home</Heading>;
 };
-
+const Header = () => {
+  return <header></header>;
+};
 const App = () => {
   return (
     <AuthProvider>

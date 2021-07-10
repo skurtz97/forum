@@ -14,12 +14,17 @@ import {
 
 import { Link as RouterLink } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
-import { validateEmail, validatePassword, validateUsername } from "../validate";
+import {
+  validateEmail,
+  validateUsername,
+  validatePassword,
+  validateConfirmPassword,
+} from "../validate";
 
 const RegisterForm = () => {
   return (
     <Formik
-      initialValues={{ email: "", username: "", password: "" }}
+      initialValues={{ email: "", username: "", password: "", confirm: "" }}
       onSubmit={(values, actions) => {
         setTimeout(() => {
           alert(JSON.stringify(values, null, 2));
@@ -27,7 +32,7 @@ const RegisterForm = () => {
         }, 1000);
       }}
     >
-      {({ isSubmitting }) => (
+      {({ values, isSubmitting }) => (
         <Form>
           <Stack spacing="6">
             <Field name="email" validate={validateEmail}>
@@ -60,6 +65,22 @@ const RegisterForm = () => {
                   <FormLabel htmlFor="password">Password</FormLabel>
                   <Input {...field} id="password" type="password" />
                   <FormErrorMessage>{form.errors.password}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
+            <Field
+              name="confirm"
+              validate={(confirm) =>
+                validateConfirmPassword(confirm, values.password)
+              }
+            >
+              {({ field, form }) => (
+                <FormControl
+                  isInvalid={form.errors.confirm && form.touched.confirm}
+                >
+                  <FormLabel htmlFor="confirm">Confirm Password</FormLabel>
+                  <Input {...field} id="confirm" type="password" />
+                  <FormErrorMessage>{form.errors.confirm}</FormErrorMessage>
                 </FormControl>
               )}
             </Field>
