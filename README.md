@@ -1,17 +1,3 @@
-# React Boilerplate
+# A simple Forum application
 
-Very simple boilerplate for a React application w/ Chakra UI.
-
-## Features
-
-- Basic React application skeleton w/ React Router
-- Babel and Webpack skeleton and configs for React
-- Webpack dev server with hot reloading
-- ESLint
-- Chakra UI is installed, set up with dark color mode as a default.
-- 
-## Usage
-- Make sure you have an up to date node/npm on your machine.
-- Just clone into a new directory and run npm install
-- Then setup ESLint configs to your preferred taste.
-
+For practice creating protected routes with React Context. Uses Firebase for session management and credentials storage. 
